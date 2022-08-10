@@ -59,8 +59,10 @@ const Home = () => {
           error.response.data &&
           error.response.data.message
         ) {
+          localStorage.clear();
           return toast.error(error.response.data.message, toastOptions);
         } else {
+          localStorage.clear();
           return toast.error(error.message, toastOptions);
         }
       }
@@ -68,7 +70,7 @@ const Home = () => {
     verify();
   }, []);
 
-  
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
