@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-import { filmRoute, commentRoute } from "../utils/APIRoutes";
+import { filmRoute, commentRoute, verifyToken } from "../utils/APIRoutes";
 
 import { Button } from "@mui/material";
 import HomePageContainer from "../components/HomePageContainer";
@@ -32,6 +32,43 @@ const Home = () => {
     theme: "dark",
   };
 
+  // Verify token
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+          const user = JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+          );
+
+          const verify = await axios.get(verifyToken, {
+            headers: {
+              "x-access-token": user.token,
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if(!verify.data.success) {
+            localStorage.clear();
+          }
+        }
+      } catch (error) {
+        if (
+          error &&
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          return toast.error(error.response.data.message, toastOptions);
+        } else {
+          return toast.error(error.message, toastOptions);
+        }
+      }
+    };
+    verify();
+  }, []);
+
+  
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -61,11 +98,15 @@ const Home = () => {
           }
         }
         setLoading(false);
-        setCurrentUser(
-          await JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-          )
-        );
+
+        if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+          setCurrentUser(
+            JSON.parse(
+              localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+            )
+          );
+        }
+
       } catch (error) {
         if (
           error &&
