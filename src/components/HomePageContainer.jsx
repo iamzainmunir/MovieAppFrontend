@@ -4,7 +4,7 @@ const HomePageContainer = ({ movies, onChange }) => {
     return (
       <div>
         {movies.length > 0 ? 
-         <Carousel onChange={onChange}>
+         <Carousel onChange={onChange} className="carouselContainer">
          {movies.map((movie) => (
            
            <div key={movie._id}>
