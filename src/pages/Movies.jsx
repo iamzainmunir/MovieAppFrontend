@@ -49,6 +49,7 @@ const Home = () => {
           });
 
           if(!verify.data.success) {
+            setCurrentUser(null)
             localStorage.clear();
           }
         }
@@ -60,9 +61,11 @@ const Home = () => {
           error.response.data.message
         ) {
           localStorage.clear();
+          setCurrentUser(null)
           return toast.error(error.response.data.message, toastOptions);
         } else {
           localStorage.clear();
+          setCurrentUser(null)
           return toast.error(error.message, toastOptions);
         }
       }
@@ -150,6 +153,19 @@ const Home = () => {
         user_id: currentUser._id,
       };
 
+      const verify = await axios.get(verifyToken, {
+        headers: {
+          "x-access-token": currentUser.token,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if(!verify.data.success) {
+        setCurrentUser(null)
+        localStorage.clear();
+        setRefresh(!refresh);
+      }
+
       const add_comment = await axios.post(commentRoute, body, {
         headers: {
           "x-access-token": currentUser.token,
@@ -167,8 +183,14 @@ const Home = () => {
         error.response.data &&
         error.response.data.message
       ) {
+        setCurrentUser(null)
+        localStorage.clear();
+        setRefresh(!refresh);
         return toast.error(error.response.data.message, toastOptions);
       } else {
+        setCurrentUser(null)
+        localStorage.clear();
+        setRefresh(!refresh);
         return toast.error(error.message, toastOptions);
       }
     }
