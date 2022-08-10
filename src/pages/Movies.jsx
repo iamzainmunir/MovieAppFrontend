@@ -169,15 +169,15 @@ const Home = () => {
 
   return (
     <>
-    <div className="containerf">
+    <div className="sliderContainer">
       <div className="header">
-        <h1>Movie App</h1>
+        <h1>MOVIE REVIEWS</h1>
       </div>
       <div className="buttons">
         {currentUser === null ? (
-          <Button onClick={() => handleLoginRegister()}>Login / Signup</Button>
+          <Button variant="contained" onClick={() => handleLoginRegister()}>Login / Signup</Button>
         ) : (
-          <Button onClick={() => handleAddMovie()}>Add Movie</Button>
+          <Button variant="contained" onClick={() => handleAddMovie()}>Add Movie</Button>
         )}
       </div>
       <div className="slider">

@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import React from "react";
+import moment from "moment";
 
 const Comments = ({ comments, loading, onChange, onSubmit, currentUser }) => {
   if (loading) {
@@ -10,7 +11,7 @@ const Comments = ({ comments, loading, onChange, onSubmit, currentUser }) => {
       {comments.map((comment, index) => (
         <div key={index} className="commentTile">
           <h4>{comment.name}</h4>
-          <p>{comment.date}</p>
+          <p>{moment(comment.date).fromNow()}</p>
           <p>{comment.comment}</p>
         </div>
       ))}
